@@ -5,17 +5,19 @@
     <meta charset="utf-8">
     <title>alldone03 | Redirecting...</title>
     <script type="text/javascript">
-        // GitHub Pages SPA hack to handle non-root paths
-        var pathSegmentsToKeep = 1;
-
+        // This handle redirects for Single Page Applications on GitHub Pages
+        // If the URL contains a path, it will try to find it under /portofolio/
         var l = window.location;
-        l.replace(
-            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-            l.pathname.split('/').slice(1 + pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-            l.hash
-        );
+        if (l.search[1] === '/') {
+            var decoded = l.search.slice(1).split('&').map(function (s) {
+                return s.replace(/~and~/g, '&')
+            }).join('?');
+            window.history.replaceState(null, null,
+                l.pathname.slice(0, -1) + decoded + l.hash
+            );
+        } else if (l.pathname === '/' || l.pathname === '') {
+            window.location.replace('/portofolio/');
+        }
     </script>
 </head>
 
