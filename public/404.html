@@ -5,17 +5,16 @@
     <meta charset="utf-8">
     <title>alldone03 | Redirecting...</title>
     <script type="text/javascript">
-        // GitHub Pages SPA hack to handle non-root paths
-        var pathSegmentsToKeep = 1;
-
+        // Single Page Application redirect hack for GitHub Pages
         var l = window.location;
-        l.replace(
-            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-            l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-            l.pathname.split('/').slice(1 + pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-            (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-            l.hash
-        );
+        if (l.search[1] === '/') {
+            var decoded = l.search.slice(1).split('&').map(function (s) {
+                return s.replace(/~and~/g, '&')
+            }).join('?');
+            window.history.replaceState(null, null,
+                l.pathname.slice(0, -1) + decoded + l.hash
+            );
+        }
     </script>
 </head>
 
